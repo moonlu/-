@@ -1,0 +1,337 @@
+<%@ page language="java" pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<body>
+<head>
+    <title>复购管理</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/blog.css" rel="stylesheet">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/baoxian_erp.js"></script>
+    <script src="./jquery-1.10.2.js"></script>
+    <link href="/static/css/vehicle.css" rel="stylesheet">
+</head>
+<form id="filterConfigForm" class="form-horizontal" role="form">
+    <div class="col-sm-12" id="content">
+        <ul class="nav nav-tabs">
+            <li role="presentation">
+                <button type="button" role="tab" data-toggle="tab" class="btn" tag="query" method="query"
+                        requestUrl='/filterProduct/list'>产品筛选项列表
+                </button>
+            </li>
+            <li role="presentation" class="active">
+                <a role="tab" data-toggle="tab">
+                    产品新增筛选项目
+                </a>
+            </li>
+        </ul>
+        <br/>
+        <div class="panel panel-info">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-3 control-label">产品：</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" id="productCode" name="productCode">
+                                <option value="">全部</option>
+                                <c:forEach var="product" items="${productList}">
+                                    <option value="<c:out value="${product.productCode}"></c:out>"><c:out
+                                            value="${product.name}"></c:out></option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-3 control-label">一级分类</label>
+                        <div class="col-sm-7">
+                            <select class="form-control" id="parentCategoryCode" name="parentCategoryCode">
+                                <option value="">全部</option>
+                                <c:forEach var="item" items="${parentCategoryList}">
+                                    <option value="<c:out value="${item.categoryCode}"></c:out>"><c:out
+                                            value="${item.categoryName}"></c:out></option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row sec_category_type" i="0">
+                    <div class="col-sm-7">
+                        <div class="form-group form-group-sm">
+                            <label class="col-sm-3 control-label">二级分类</label>
+                            <div class="col-sm-7">
+                                <select class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="checkbox-inline">
+                        <button type="button" class="btn btn-primary btn-xs category_type_action">+
+                        </button>
+                    </label>
+                </div>
+        </div>
+    </div>
+    <div class="col-sm-12" id="sub_content">
+        <div class="panel panel-info sub-label" i="0">
+            <div class="panel-heading">121</div>
+            <div class="panel-body">
+                <div class="row filterItem">
+                    <div class="col-sm-3 itemTitle">
+                        <div class="form-group form-group-sm">
+                            <label class="col-sm-4 control-label">标签</label>
+                            <div class="col-sm-7">
+                                <select class="form-control" name="filterType">
+                                    <option value="">全部</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="form-group form-group-sm">
+                            <div class="col-sm-8 htmlSimple">
+                                <div class="row nor">
+                                    <div class="col-sm-3">
+                                        <%--<input type="text" class="form-control" name="firstFilterValue"/>--%>
+                                        <select class="form-control" name="firstFilterValue">
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" name="firstFilterUnit">
+                                            <c:forEach items="${unitTypeMap}" var="m">
+                                                <option value="${m.key}">${m.value}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>状态：</label>
+                                        <select name="status">
+                                            <option value="1">有效</option>
+                                            <option value="2">无效</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row scope" style="display: none">
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control"  name="firstFilterValue">
+                                    </div>
+                                    <div class="col-sm-3"><select class="form-control" name="firstFilterUnit">
+                                        <c:forEach items="${unitTypeMap}" var="m">
+                                            <option value="${m.key}">${m.value}</option>
+                                        </c:forEach>
+                                    </select></div>
+                                    <div class="col-sm-2"><input type="text" class="form-control"
+                                                                 name="secondFilterValue"></div>
+                                    <div class="col-sm-3"><select class="form-control" name="secondFilterUnit">
+                                        <c:forEach items="${unitTypeMap}" var="m">
+                                            <option value="${m.key}">${m.value}</option>
+                                        </c:forEach>
+                                    </select></div>
+                                    <div class="col-sm-2">
+                                        <label>状态：</label>
+                                        <select name="status">
+                                            <option value="1">有效</option>
+                                            <option value="2">无效</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary btn-xs item_action">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-success" id="saveOrUpdate_click">保存</button>
+        <button type="button" style="display: none;" id="saveOrUpdate_submit"
+                callbackUrl="/filterProduct/list" form="submitDataForm" action='post' tag="request"
+                requestUrl='/filterProduct/add' method="modelAndUpdate">
+        </button>
+    </div>
+</form>
+
+<form id="submitDataForm" style="display:none;">
+</form>
+<script>
+    $(function () {
+        /**
+         * 增加二级分类
+         */
+        $('body').on('change','#parentCategoryCode',function () {
+            var html = '<option value="">全部</option>';
+            var parentCategory = $("#parentCategoryCode").val()
+            var productCode = $("#productCode").val();
+
+            $.ajax({
+                type : "POST",
+                url :'/filterProduct/getCategoryByLevel1',
+                async:false,
+                data:{
+                    parentCategory:parentCategory,
+                    productCode : productCode
+                },
+                success:function (data) {
+                    var obj1 = eval(data);
+                    for(var i=0; i<obj1.length;i++){
+                        html+='<option value="'+obj1[i].categoryCode+'">'+obj1[i].categoryName+'</option>';
+                    }
+
+                    $('.sec_category_type').find('select').html(html);
+                }
+              });
+            }
+        ).on('click', '.category_type_action', function () {
+            if ($(this).text() == '-') {
+                $(this).parents('div.sec_category_type').off('click').remove();
+                var i = $(this).parents('.row').attr('i');
+                $('.sub-label[i="' + $(this).parents('.sec_category_type').attr('i') + '"]').off('click').remove();
+                return;
+            }
+            var index = $('.sub-label:last').attr('i') ? Number($('.sub-label:last').attr('i')) + 1 : 1;
+            var obj = $('.sec_category_type:first').clone();
+            obj.find('select').get(0).selectedIndex = 0;
+            obj.attr('i', index);
+            obj.find('label.control-label').text('');
+            obj.find('button.category_type_action').text('-');
+            $('.panel:first').append(obj);
+            var subClone = $('.sub-label:first').clone();
+            $('#sub_content').append(subClone);
+            subClone.attr('i', index).hide();
+
+        }).on('change', '.sec_category_type', function () {
+            var productCode = $("#productCode").val();
+            var category =  $(this).find('select').val();
+            var parentCategory = $("#parentCategoryCode").val();
+            var html= '<option value="0">全部</option>';
+            $.ajax({
+                type : "POST",
+                url :'/filterProduct/getItems',
+                async:false,
+                data:{
+                    parentCategory:parentCategory,
+                    category:category,
+                    productCode:productCode
+                },
+                success:function (data) {
+                    var obj1 = eval(data);
+                    for(var i=0; i<obj1.length;i++){
+                        html+='<option value="'+obj1[i].code+'">'+obj1[i].name+'</option>';
+                    }
+                }
+            });
+            var index = $(this).attr('i');
+            $('.sub-label[i="' + index + '"] .panel-heading').text( $(this).find('select').find('option:selected').text());
+            $('.sub-label[i="' + index + '"]').show();
+            $('.sub-label[i="' + index + '"]').find('select:first').html(html);
+        }).on('click', '.item_action', function () {
+            if ($(this).text() == '+') {
+                var obj = $(this).parents('.filterItem').clone();
+                obj.find('button.item_action').text('-');
+                obj.find('[name=firstFilterValue]').val('');
+                obj.find('[name=secondFilterValue]').val('');
+                obj.find('.itemTitle').hide();
+                $(this).parents('.panel-body').append(obj);
+            } else {
+                $(this).parents('.filterItem').off().remove();
+            }
+        }).on('change', '.itemTitle', function () {
+            var index = $(this).parents('.sub-label').attr('i');
+            var value = $(this).find('select').val();
+            var category =  $('.sec_category_type[i="' + index + '"]').find('select').find('option:selected').val();
+            var parentCategory = $("#parentCategoryCode").val();
+
+            if (value == 3) {
+                $(this).parents('.sub-label').find(".htmlSimple .scope").show();
+                $(this).parents('.sub-label').find(".htmlSimple .nor").hide();
+            } else {
+                $(this).parents('.sub-label').find(".htmlSimple .nor").show();
+                $(this).parents('.sub-label').find(".htmlSimple .scope").hide();
+                var html= '';
+                console.info(html);
+                $.ajax({
+                    type : "POST",
+                    url :'/filterProduct/getItemContents',
+                    async:false,
+                    data:{
+                        parentCategory:parentCategory,
+                        category:category,
+                        filterType:value
+                    },
+                    success:function (data) {
+                        console.info(data);
+                        var obj1 = eval(data);
+                        for(var i=0; i<obj1.length;i++){
+                            html+='<option value="'+obj1[i].code+'">'+obj1[i].name+'</option>';
+                        }
+                    }
+                });
+                $(this).parents('.sub-label').find(".htmlSimple .nor").find('select:first').html(html);
+            }
+
+        });
+
+        $('#saveOrUpdate_click').click(function () {
+            var html = '';
+            $.each($('.sec_category_type'), function (i, o) {
+                console.debug(i);
+                var filters = {};
+                var code = $(o).find('select').find("option:selected").val();
+                var parentCategoryCode = $("#parentCategoryCode").find("option:selected").val();
+                var productCode = $("#productCode").find("option:selected").val();
+                var subArr = $('.sub-label[i="' + $(o).attr('i') + '"] .htmlSimple  .row:visible');
+                $.each(subArr, function (j, a) {
+                    var status = $(a).find('[name="status"]').find("option:selected").val();
+                    if(status == undefined){
+                        status = 0;
+                    }
+                    var type = $(a).parents(".filterItem").find('[name="filterType"]').val();
+                    if(type == undefined){
+                        type = 0;
+                    }
+                    console.info("bbbbb");
+                    var fValue = $(a).find('[name="firstFilterValue"]').val();
+                    if(fValue == undefined){
+                        fValue = '';
+                    }
+                    var fUnit = $(a).find('[name="firstFilterUnit"]').val();
+                    if(fUnit == undefined){
+                        fUnit = 0;
+                    }
+                    var sValue = $(a).find('[name="secondFilterValue"]').val();
+                    if(sValue == undefined){
+                        sValue = '';
+                    }
+                    var sUnit = $(a).find('[name="secondFilterUnit"]').val();
+                    if(sUnit == undefined){
+                        sUnit = 0;
+                    }
+                    console.info("aaa");
+                    var number = i+j;
+                    html += '<input type="hidden" name="filters[' + number+ '].filterType" value="' + type + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].firstFilterValue" value="' + fValue + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].firstFilterUnit" value="' + fUnit + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].secondFilterValue" value="' + sValue + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].secondFilterUnit" value="' + sUnit + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].status" value="' + status + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].categoryCode" value="' + code + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].productCode" value="' + productCode + '"/>';
+                    html += '<input type="hidden" name="filters[' + number + '].parentCategoryCode" value="' + parentCategoryCode + '"/>';
+                });
+            });
+            $('#submitDataForm').html(html);
+            $('#saveOrUpdate_submit').trigger('click');
+        });
+    });
+</script>
+</body>
